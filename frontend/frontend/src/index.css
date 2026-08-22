@@ -1,9 +1,20 @@
 :root {
+  --sunset: #FFC067;
+  --sky: #66C4FF;
+  --aqua: #66F4FF;
+  --mist: #7D99AA;
+  --navy: #16314d;
+  --ink: #12314a;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-strong: rgba(255, 255, 255, 0.9);
+  --border: rgba(125, 153, 170, 0.24);
+  --text: #16314d;
+  --muted: #567089;
   font-family: Inter, 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #0f172a;
-  background: #f4f7fb;
+  color: var(--text);
+  background: #edf7fd;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,8 +32,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #ecf7ff 0%, #f8fafc 60%, #eef2ff 100%);
-  color: #0f172a;
+  background:
+    linear-gradient(135deg, rgba(102, 196, 255, 0.18), rgba(102, 244, 255, 0.12)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center/cover fixed no-repeat;
+  color: var(--text);
 }
 
 img {
@@ -44,20 +57,20 @@ button {
 input,
 select,
 textarea {
-  background: #fff;
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(125, 153, 170, 0.35);
   border-radius: 12px;
-  color: #0f172a;
+  color: var(--text);
   padding: 0.8rem 0.9rem;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: rgba(59, 130, 246, 0.8);
-  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+  border-color: rgba(102, 196, 255, 0.9);
+  box-shadow: 0 0 0 4px rgba(102, 196, 255, 0.16);
 }
 
 textarea {
