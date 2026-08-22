@@ -1,122 +1,130 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import {
+  BrowserRouter,
+  Link,
+  NavLink,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import {
+  Compass,
+  LayoutDashboard,
+  LogOut,
+  MapPinned,
+  PlaneTakeoff,
+  UserCircle2,
+} from 'lucide-react';
+import './App.css';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import BudgetPage from './pages/Budget';
+import CreateTripPage from './pages/CreateTrip';
+import DashboardPage from './pages/Dashboard';
+import ItineraryBuilderPage from './pages/ItineraryBuilder';
+import LoginPage from './pages/Login';
+import MyTripsPage from './pages/MyTrips';
+import ProfilePage from './pages/Profile';
+import PublicTripPage from './pages/PublicTrip';
+import SignupPage from './pages/Signup';
+import TripDetailsPage from './pages/TripDetails';
 
-function App() {
-  const [count, setCount] = useState(0)
+function ProtectedLayout() {
+  const { user, logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
+  const navItems = [
+    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/my-trips', label: 'My Trips', icon: Compass },
+    { to: '/trips/create', label: 'Create Trip', icon: MapPinned },
+    { to: '/profile', label: 'Profile', icon: UserCircle2 },
+  ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="Hero image" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-shell">
+      <header className="topbar">
+        <Link to="/dashboard" className="brand-wrap">
+          <PlaneTakeoff size={20} />
+          <div>
+            <span className="eyebrow">GlobeTrotter</span>
+            <strong>Travel planner</strong>
+          </div>
+        </Link>
 
-      <div className="ticks"></div>
+        <nav className="main-nav" aria-label="Main navigation">
+          {navItems.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              <Icon size={16} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
+        </nav>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank" rel="noopener noreferrer">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank" rel="noopener noreferrer">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="user-menu">
+          <button type="button" className="ghost-button" onClick={() => navigate('/profile')}>
+            <UserCircle2 size={16} />
+            {user?.name || 'Profile'}
+          </button>
+          <button type="button" className="logout-button" onClick={handleLogout}>
+            <LogOut size={16} />
+            Logout
+          </button>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank" rel="noopener noreferrer">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank" rel="noopener noreferrer">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank" rel="noopener noreferrer">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noopener noreferrer">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <main className="page-container">
+        <Outlet />
+      </main>
+    </div>
+  );
 }
 
-export default App
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+      <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignupPage />} />
+      <Route path="/public/trips/:token" element={<PublicTripPage />} />
+
+      <Route element={<ProtectedLayout />}>
+        <Route path="/" element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/my-trips" element={<MyTripsPage />} />
+        <Route path="/trips/create" element={<CreateTripPage />} />
+        <Route path="/trips/:id" element={<TripDetailsPage />} />
+        <Route path="/trips/:id/itinerary" element={<ItineraryBuilderPage />} />
+        <Route path="/trips/:id/budget" element={<BudgetPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
