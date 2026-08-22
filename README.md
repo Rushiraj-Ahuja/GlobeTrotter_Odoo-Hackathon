@@ -97,6 +97,6 @@ npm run dev
 | Name | Area |
 | --- | --- |
 | Rushiraj Ahuja | Frontend |
-| Nirav Luhar | Backend |
+| Nirav lavariya | Backend |
 | Nilesh Parmar | Database |
 | Makvana Dharmesh | Integration |
